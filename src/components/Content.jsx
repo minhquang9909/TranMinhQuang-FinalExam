@@ -20,23 +20,33 @@ const Content = ({ activeKey, query, checked, setChecked, todos, onUpdate }) => 
 
   // ✅ Đổi trạng thái Active <-> Completed
   const toggleLevel = async (id) => {
-    const item = todos.find((i) => i.id === id);
-    if (!item) return;
+    const item = todos.find((i) => i.id === id); // Sử dụng === vì tất cả ID đều là string
+    
+    if (!item) {
+      console.error("Item not found with id:", id);
+      return;
+    }
 
-    const updatedItem = {
-      ...item,
-      level: item.level === "Completed" ? "Active" : "Completed",
-    };
+    const newLevel = item.level === "Completed" ? "Active" : "Completed";
 
-    // Gửi PATCH lên API
-    await fetch(`${API_URL}/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ level: updatedItem.level }),
-    });
+    try {
+      // Gửi PATCH lên API
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ level: newLevel }),
+      });
 
-    // Cập nhật UI
-    onUpdate(); // Refresh data từ parent component
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      // Cập nhật UI
+      onUpdate(); // Refresh data từ parent component
+    } catch (error) {
+      console.error("Error updating todo:", error);
+      alert("Lỗi khi cập nhật todo. Vui lòng thử lại!");
+    }
   };
 
   // ✅ Xử lý tick chọn xoá

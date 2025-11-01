@@ -61,6 +61,7 @@ const Tabs = () => {
           onUpdate={refreshContents}
           checked={checked}
           setChecked={setChecked}
+          todos={todos}
         />
       </div>
 
