@@ -1,0 +1,44 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Do Coding Chanllenge 1",
+      "level": "Active"
+    },
+    {
+      "id": 2,
+      "title": "Do Coding Chanllenge 2",
+      "level": "Active"
+    },
+    {
+      "id": 3,
+      "title": "Do Coding Chanllenge 3",
+      "level": "Completed"
+    },
+    {
+      "id": 4,
+      "title": "Do Coding Chanllenge 4",
+      "level": "Completed"
+    },
+    {
+      "id": 5,
+      "title": "Do Coding Chanllenge 5",
+      "level": "Active"
+    },
+    {
+      "id": 6,
+      "title": "Do Coding Chanllenge 6",
+      "level": "Completed"
+    },
+    {
+      "id": "bf66",
+      "title": "New Todo 636",
+      "level": "Completed"
+    },
+    {
+      "id": "e827",
+      "title": "New Todo 343",
+      "level": "Completed"
+    }
+  ]
+}
