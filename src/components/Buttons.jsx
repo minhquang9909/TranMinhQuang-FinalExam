@@ -26,18 +26,15 @@ const Buttons = ({ activeKey, onUpdate, checked, setChecked, todos }) => {
       level: "Active",
     };
 
-    try {
-      await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTodo),
-      });
-      setShowPopup(false);
-      setTodoTitle("");
-      onUpdate(); // Refresh lại danh sách sau khi thêm
-    } catch (error) {
-      console.error("Lỗi khi thêm todo:", error);
-    }
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTodo),
+    });
+    
+    setShowPopup(false);
+    setTodoTitle("");
+    onUpdate();
   };
 
   // 🚫 Đóng popup
@@ -60,39 +57,30 @@ const Buttons = ({ activeKey, onUpdate, checked, setChecked, todos }) => {
 
   // 🧨 Xóa tất cả todo trong tab Completed
   const handleDeleteAll = async () => {
-    try {
-      // Lấy tất cả todos có level = "Completed"
-      const completedTodos = await fetch(`${API_URL}?level=Completed`).then(res => res.json());
-      
-      // Xóa tất cả completed todos
-      await Promise.all(
-        completedTodos.map((todo) =>
-          fetch(`${API_URL}/${todo.id}`, { method: "DELETE" })
-        )
-      );
-      
-      setChecked([]); // reset danh sách được chọn
-      setShowConfirmDelete(false);
-      onUpdate(); // refresh lại danh sách
-    } catch (error) {
-      console.error("Lỗi khi xoá tất cả todo:", error);
-    }
+    const completedTodos = await fetch(`${API_URL}?level=Completed`).then(res => res.json());
+    
+    await Promise.all(
+      completedTodos.map((todo) =>
+        fetch(`${API_URL}/${todo.id}`, { method: "DELETE" })
+      )
+    );
+    
+    setChecked([]);
+    setShowConfirmDelete(false);
+    onUpdate();
   };
 
   // 🧨 Xóa các todo được chọn trong tab Completed
   const handleDeleteSelected = async () => {
-    try {
-      await Promise.all(
-        checked.map((id) =>
-          fetch(`${API_URL}/${id}`, { method: "DELETE" })
-        )
-      );
-      setChecked([]); // reset danh sách được chọn
-      setShowConfirmDelete(false);
-      onUpdate(); // refresh lại danh sách
-    } catch (error) {
-      console.error("Lỗi khi xoá todo được chọn:", error);
-    }
+    await Promise.all(
+      checked.map((id) =>
+        fetch(`${API_URL}/${id}`, { method: "DELETE" })
+      )
+    );
+    
+    setChecked([]);
+    setShowConfirmDelete(false);
+    onUpdate();
   };
 
   // 🚫 Đóng popup confirm
@@ -103,12 +91,9 @@ const Buttons = ({ activeKey, onUpdate, checked, setChecked, todos }) => {
 
   // Lấy danh sách todos sẽ bị xóa
   const getItemsToDelete = () => {
-    if (deleteType === "all") {
-      return todos.filter(todo => todo.level === "Completed");
-    } else if (deleteType === "selected") {
-      return todos.filter(todo => checked.includes(todo.id));
-    }
-    return [];
+    return deleteType === "all" 
+      ? todos.filter(todo => todo.level === "Completed")
+      : todos.filter(todo => checked.includes(todo.id));
   };
 
   return (

@@ -13,13 +13,9 @@ const Tabs = () => {
     const API_URL = "http://localhost:3001/todos";
 
     const refreshContents = async () => {
-    try {
       const res = await fetch(API_URL);
       const data = await res.json();
       setTodos(data);
-    } catch (err) {
-      console.error("Lỗi tải dữ liệu:", err);
-    }
     };
         useEffect(() => {
             refreshContents();
